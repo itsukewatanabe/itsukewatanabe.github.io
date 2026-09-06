@@ -1,0 +1,10 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.schachduell",
+      "sha256_cert_fingerprints": ["99:E9:2E:FB:91:31:F0:D8:15:40:7B:D7:F0:48:BD:BF:C6:5A:10:54:18:49:4F:D1:2D:01:85:E3:68:1D:97:E5"]
+    }
+  }
+]

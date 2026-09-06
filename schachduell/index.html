@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Schachduell — Einladung</title>
+<style>
+  :root {
+    --bg: #12171C; --surface: #1C242C; --surface2: #263039;
+    --text: #E6EDF3; --dim: #8B9AA7; --accent: #4FB3A9;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 28px 20px 56px;
+    background: var(--bg); color: var(--text);
+    font: 16px/1.55 -apple-system, "Segoe UI", Roboto, system-ui, sans-serif;
+    display: flex; flex-direction: column; align-items: center;
+  }
+  main { width: 100%; max-width: 420px; }
+  h1 { font-size: 30px; margin: 0 0 4px; letter-spacing: -0.02em; }
+  .sub { color: var(--dim); margin: 0 0 24px; }
+  .card { background: var(--surface); border-radius: 16px; padding: 20px; margin-bottom: 16px; }
+  .lbl {
+    font-size: 12px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .08em; color: var(--dim); margin: 0 0 8px;
+  }
+  .code {
+    font: 700 32px/1.2 ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    letter-spacing: .12em; color: var(--accent); margin: 0;
+  }
+  a.btn, button.btn {
+    display: block; width: 100%; margin-top: 14px; padding: 14px 16px;
+    border: 0; border-radius: 12px; font: 700 16px/1.2 inherit;
+    text-align: center; text-decoration: none; cursor: pointer;
+    background: var(--surface2); color: var(--text);
+  }
+  a.btn.primary { background: var(--accent); color: var(--bg); }
+  ol { padding-left: 20px; margin: 8px 0 0; color: var(--dim); }
+  li { margin-bottom: 8px; }
+  li b { color: var(--text); }
+  .foot { color: var(--dim); font-size: 13px; margin-top: 8px; }
+  .hidden { display: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Schachduell</h1>
+  <p class="sub">Zwei Handys, ein Brett — egal ob WLAN oder Mobilfunk.</p>
+
+  <div class="card" id="invite">
+    <p class="lbl">Einladungscode</p>
+    <p class="code" id="code">—</p>
+    <a class="btn primary" id="open" href="#">Im Spiel öffnen</a>
+    <p class="foot">Öffnet sich nichts? Dann ist die App noch nicht installiert — siehe unten.</p>
+  </div>
+
+  <div class="card">
+    <p class="lbl">App installieren</p>
+    <a class="btn primary" href="../Schachduell.apk" download>Schachduell.apk laden</a>
+    <ol>
+      <li>APK herunterladen und öffnen. Android fragt nach der Erlaubnis,
+          Apps aus dieser Quelle zu installieren — <b>erlauben</b>.</li>
+      <li>App öffnen, <b>Namen</b> eintragen.</li>
+      <li>Diesen Link noch einmal antippen — oder den Code oben
+          bei <b>„Einladung annehmen“</b> eintippen.</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <p class="lbl">Wie es funktioniert</p>
+    <p class="foot" style="margin-top:0">
+      Die Partie läuft nicht über einen eigenen Server, sondern über den öffentlichen
+      Relay-Dienst ntfy.sh — nur HTTPS, also durch jedes Mobilfunknetz, WLAN und VPN.
+      Wer den Code hat, ist im Spiel; deshalb den Code nur an deinen Gegner schicken.
+    </p>
+  </div>
+</main>
+
+<script>
+  // The code arrives as ?c=CODE. Everything else on the page is static.
+  var params = new URLSearchParams(location.search);
+  var raw = (params.get('c') || '').toUpperCase().replace(/[^2-9A-HJ-NP-Z]/g, '');
+  var el = document.getElementById('code');
+  var open = document.getElementById('open');
+  if (raw.length === 8) {
+    el.textContent = raw.slice(0, 4) + '-' + raw.slice(4);
+    open.href = 'schachduell://join/' + raw;
+  } else {
+    document.getElementById('invite').classList.add('hidden');
+  }
+</script>
+</body>
+</html>
