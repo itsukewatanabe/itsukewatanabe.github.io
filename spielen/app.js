@@ -328,7 +328,11 @@ function render() {
 
   const waiting = !m.started && !m.seatTaken;
   $("link-box").classList.toggle("hidden", !waiting);
-  if (waiting) $("link-box").textContent = Codes.pretty(m.code);
+  if (waiting) {
+    $("link-box").innerHTML = `${escapeHtml(Codes.pretty(m.code))}`
+      + `<a class="invite-link" href="${escapeHtml(Codes.link(m.code))}">`
+      + `${escapeHtml(Codes.link(m.code))}</a>`;
+  }
 
   $("resign").disabled = !m.started || m.over;
   $("draw").disabled = !m.started || m.over || m.drawOfferedByMe;
@@ -462,14 +466,20 @@ async function shareInvite() {
   const m = app.match;
   if (!m) return;
   const text = Codes.invite(m.myName, m.code);
-  try {
-    if (navigator.share) { await navigator.share({ text }); return; }
-  } catch { /* the sheet was dismissed — fall through to copying */ }
+  if (navigator.share) {
+    try {
+      await navigator.share({ text });
+      return;
+    } catch (e) {
+      // Dismissing the sheet is a decision, not a failure — don't fall through to a fallback.
+      if (e?.name === "AbortError") return;
+    }
+  }
   try {
     await navigator.clipboard.writeText(text);
     $("substatus").textContent = "Einladung kopiert — jetzt in WhatsApp einfügen.";
   } catch {
-    prompt("Einladung kopieren:", Codes.link(m.code));
+    $("substatus").textContent = "Link unten lange antippen, um ihn zu kopieren.";
   }
 }
 

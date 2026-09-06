@@ -158,6 +158,13 @@ button.wide { display: block; width: 100%; margin-top: 14px; }
   font: 700 20px/1.3 ui-monospace, Menlo, monospace; letter-spacing: .1em;
   color: var(--accent); text-align: center; word-break: break-all;
 }
+.invite-link {
+  display: block; margin-top: 8px;
+  font: 400 13px/1.4 ui-monospace, Menlo, monospace; letter-spacing: 0;
+  color: var(--dim); text-decoration: none; word-break: break-all;
+  user-select: all; -webkit-user-select: all;      /* one long press selects the whole link */
+}
+
 .dot-link {
   width: 9px; height: 9px; border-radius: 50%; background: var(--bad); flex: none;
 }
