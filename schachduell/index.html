@@ -50,8 +50,10 @@
   <div class="card" id="invite">
     <p class="lbl">Einladungscode</p>
     <p class="code" id="code">—</p>
-    <a class="btn primary" id="open" href="#">Im Spiel öffnen</a>
-    <p class="foot">Öffnet sich nichts? Dann ist die App noch nicht installiert — siehe unten.</p>
+    <a class="btn primary" id="open" href="#">In der App öffnen</a>
+    <a class="btn" id="web" href="/spielen/">Im Browser spielen — ohne Installation</a>
+    <p class="foot">Der Browser reicht völlig. Die App bringt nur Benachrichtigungen, wenn dein
+       Gegner gezogen hat.</p>
   </div>
 
   <div class="card">
@@ -82,9 +84,11 @@
   var raw = (params.get('c') || '').toUpperCase().replace(/[^2-9A-HJ-NP-Z]/g, '');
   var el = document.getElementById('code');
   var open = document.getElementById('open');
+  var web = document.getElementById('web');
   if (raw.length === 8) {
     el.textContent = raw.slice(0, 4) + '-' + raw.slice(4);
     open.href = 'schachduell://join/' + raw;
+    web.href = '/spielen/?c=' + raw;
   } else {
     document.getElementById('invite').classList.add('hidden');
   }

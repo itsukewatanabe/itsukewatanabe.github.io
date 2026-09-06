@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#12171C">
+<meta name="robots" content="noindex, nofollow">
+<title>Schachduell</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>♞</text></svg>">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+
+  <!-- ------------------------------------------------------------- lobby -->
+  <section id="lobby">
+    <h1>Schachduell</h1>
+    <p class="sub">Zwei Handys, ein Brett — egal ob WLAN oder Mobilfunk. Kein Download, kein Konto.</p>
+
+    <div class="card hidden" id="resume-card">
+      <h2>Laufende Partie</h2>
+      <p class="sub" id="resume-info" style="margin:4px 0 0"></p>
+      <div class="row">
+        <button id="resume-drop">Verwerfen</button>
+        <button id="resume-open" class="primary">Weiterspielen</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Neue Partie</h2>
+
+      <p class="lbl">Dein Name</p>
+      <input type="text" id="name-input" placeholder="z. B. Leonid" maxlength="20" autocomplete="name">
+
+      <p class="lbl">Deine Farbe</p>
+      <div class="chips" id="color-chips">
+        <button data-value="0">Weiß</button>
+        <button data-value="1">Schwarz</button>
+        <button data-value="2">Zufall</button>
+      </div>
+
+      <p class="lbl">Deine Zugzeit (pro Zug)</p>
+      <div class="chips" id="my-time-chips"></div>
+
+      <p class="lbl">Zugzeit des Gegners</p>
+      <div class="chips" id="opp-time-chips"></div>
+
+      <p class="hint">
+        Läuft deine Zugzeit ab, ist die Partie verloren. Die Uhr läuft nur, solange die Seite
+        offen und sichtbar ist — beim Zurückkommen bekommst du 3 Sekunden geschenkt.
+      </p>
+
+      <button id="create" class="primary wide">Einladung erstellen</button>
+    </div>
+
+    <div class="card">
+      <h2>Einladung annehmen</h2>
+      <p class="sub" style="margin:4px 0 0">
+        Tippe den Link aus der Nachricht an — oder gib den Code hier ein.
+      </p>
+      <p class="lbl">Code</p>
+      <input type="text" id="code-input" placeholder="ABCD-EFGH" maxlength="20"
+             autocapitalize="characters" autocomplete="off" spellcheck="false">
+      <button id="join" class="primary wide">Beitreten</button>
+    </div>
+
+    <p class="hint">
+      Die Partie läuft über den öffentlichen Relay-Dienst ntfy.sh — kein eigener Server, nur
+      HTTPS, deshalb kommt sie durch jedes Netz. Wer den Code hat, ist im Spiel: schick ihn nur
+      deinem Gegner.
+    </p>
+  </section>
+
+  <!-- -------------------------------------------------------------- game -->
+  <section id="game" class="hidden">
+    <div class="player" id="opp-row">
+      <span class="dot-link" id="link-dot" title="Verbindung"></span>
+      <span class="who" id="opp-name">…</span>
+      <span class="clock" id="opp-clock">∞</span>
+    </div>
+
+    <div id="board-wrap">
+      <div id="board"></div>
+      <div id="promo" class="hidden"></div>
+    </div>
+
+    <div id="moves"></div>
+    <div id="status"></div>
+    <div id="substatus"></div>
+    <div id="link-box" class="hidden"></div>
+
+    <div class="player" id="me-row" style="margin-top:12px">
+      <span class="who" id="my-name">Du</span>
+      <span class="clock" id="my-clock">∞</span>
+    </div>
+
+    <button id="big-action" class="primary wide hidden"></button>
+    <div class="row">
+      <button id="resign">Aufgeben</button>
+      <button id="draw">Remis</button>
+      <button id="share">Einladung</button>
+    </div>
+    <button id="leave" class="wide">Zurück zur Übersicht</button>
+  </section>
+
+</main>
+<script type="module" src="app.js"></script>
+</body>
+</html>
