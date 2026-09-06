@@ -47,6 +47,7 @@ export class Relay {
   connect() {
     if (this.source) this.source.close();
     this.lastBeat = Date.now();
+    this.catchUp();
     const source = new EventSource(`${BASE}${this.topic}/sse?since=all`);
     this.source = source;
 
@@ -67,6 +68,30 @@ export class Relay {
       if (payload.id) this.seen.add(payload.id);
       this.onMessage(payload.message);
     };
+  }
+
+  /**
+   * Pulls the topic's history in one plain request, on top of the stream's own replay.
+   *
+   * The stream is a live wire, not a guaranteed archive: a subscription can open, hand over
+   * part of the cache and then simply go quiet — which looked exactly like a half-finished
+   * game. This request either returns the whole history or fails outright, and the ids make
+   * the overlap with the stream free.
+   */
+  async catchUp() {
+    try {
+      const res = await fetch(`${BASE}${this.topic}/json?poll=1&since=all`);
+      if (!res.ok) return;
+      for (const line of (await res.text()).split("\n")) {
+        if (!line.trim() || this.stopped) continue;
+        let payload;
+        try { payload = JSON.parse(line); } catch { continue; }
+        if (payload.event !== "message" || !payload.message) continue;
+        if (payload.id && this.seen.has(payload.id)) continue;
+        if (payload.id) this.seen.add(payload.id);
+        this.onMessage(payload.message);
+      }
+    } catch { /* the stream is the other half of this; it retries by itself */ }
   }
 
   /** Queues a line. Never drops it — a flaky network only delays the move. */
